@@ -1,0 +1,42 @@
+{
+  "name": "ingy-npm",
+  "version": "0.0.1",
+  "description": "Ingy döt Net's NPM packaging tools",
+  "keywords": [
+    "ingy",
+    "npm"
+  ],
+  "homepage": "https://www.npmjs.com/~ingy",
+  "bugs": {
+    "url": "https://github.com/ingydotnet/ingy-npm/issues"
+  },
+  "license": {
+    "type": "MIT"
+  },
+  "author": {
+    "name": "Ingy döt Net",
+    "email": "ingy@ingy.net",
+    "url": "http://ingy.net"
+  },
+  "bin": {
+    "ingy-npm-check-release": "./bin/ingy-npm-check-release",
+    "ingy-npm-make-npm": "./bin/ingy-npm-make-npm",
+    "ingy-npm-make-package-json": "./bin/ingy-npm-make-package-json"
+  },
+  "directories": {
+    "lib": "./share"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ingydotnet/ingy-npm"
+  },
+  "scripts": {
+  },
+  "dependencies": {
+  },
+  "devDependencies": {
+  },
+  "engines": {
+    "node": ">=0.4.0"
+  }
+}
