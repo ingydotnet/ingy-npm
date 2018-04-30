@@ -1,5 +1,13 @@
 .PHONY: npm doc test
 
+INGY_NPM := ../ingy-npm
+
+export PATH := $(PWD)/node_modules/.bin:$(PATH)
+
+ifeq ($(wildcard Meta),)
+    $(error Meta file is required)
+endif
+
 NAME := $(shell grep '^name: ' Meta 2>/dev/null | cut -d' ' -f2)
 VERSION := $(shell grep '^version: ' Meta 2>/dev/null | cut -d' ' -f2)
 DISTDIR := $(NAME)-$(VERSION)
@@ -10,7 +18,12 @@ ALL_NPM_DIR := $(ALL_LIB_DIR:%=npm/%)
 ALL_COFFEE := $(shell find lib -name *.coffee)
 ALL_NPM_JS := $(ALL_COFFEE:%.coffee=npm/%.js)
 
-INGY_NPM := node_modules/ingy-npm
+NODE_MODULES := \
+    $(INGY_NPM) \
+    coffeescript \
+    js-yaml \
+    pkg \
+    $(shell jyj Meta | jq -r '(.["=npm"].dependencies // {}) + (.["=npm"].devDependencies // {}) | keys | .[]')
 
 default: help
 
@@ -30,6 +43,12 @@ help:
 	@echo '    make publish-dryrun   - Don'"'"'t actually push to NPM'
 	@echo ''
 
+node_modules:
+	mkdir $@
+	npm init --yes > /dev/null
+	npm install --no-save $(NODE_MODULES)
+	rm -f package*
+
 ingy-npm-test:
 	coffee -e '(require "./test/lib/test/harness").run()' $@/*.coffee
 
@@ -40,8 +59,8 @@ install: distdir
 doc:
 	swim --to=pod --complete --wrap doc/$(NAME).swim > ReadMe.pod
 
-npm:
-	$(INGY_NPM)/bin/ingy-npm-make-npm
+npm: node_modules
+	node_modules/.bin/ingy-npm-make-npm
 
 dist: npm
 	(cd npm; dzil build)
@@ -74,4 +93,4 @@ ingy-npm-clean:
 
 #------------------------------------------------------------------------------
 check-release:
-	$(INGY_NPM)/bin/ingy-npm-check-release
+	ingy-npm-check-release
