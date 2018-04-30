@@ -8,16 +8,30 @@ mkdir npm
 (
   set -x
   cp Changes npm
-  for coffee in $(find lib | grep -E '\.coffee$'); do
-    if [[ $coffee == 'lib/index.coffee' ]]; then
+  for file in $(find lib | grep -E '\.coffee$'); do
+    if [[ $file == 'lib/index.coffee' ]]; then
       js="npm/index.js"
     else
-      js="npm/${coffee/\.coffee/.js}"
+      js="npm/${file/\.coffee/.js}"
     fi
     mkdir -p "$(dirname $js)"
-    coffee --print --compile "$coffee" > "$js"
+    coffee --print --compile "$file" > "$js"
   done
-  [ -e bin ] && cp -r bin npm/
+  if [[ -d bin ]]; then
+    for file in $(find bin -type f); do
+      js="npm/$file"
+      mkdir -p "$(dirname $js)"
+
+      if $(head -n1 $file | grep -q coffee); then
+        echo "#!/usr/bin/env node" > "$js"
+        coffee --print --compile "$file" >> "$js"
+      else
+        cp $file $js
+      fi
+
+      chmod +x "$js"
+    done
+  fi
   [ -e eg ] && cp -r eg npm/
   cp -r test npm/
   ingy-npm-make-package-json > npm/package.json
@@ -31,6 +45,7 @@ for swim in $(find doc -type f -name '*.swim'); do
     (
       set -x
       swim --to=md --complete --wrap "$swim" > "$md"
+      swim --to=md --complete --wrap "$swim" > npm/ReadMe.md
     )
   else
     (
