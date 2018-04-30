@@ -23,11 +23,12 @@ plan =
     name: 'author/name'
     email: 'author/email'
     url: 'author/homepage'
-  engines: 'engines'
   dependencies: 'dependencies'
   devDependencies: 'devDependencies'
-  scripts: 'scripts'
+  bin: 'bin'
   directories: 'directories'
+  scripts: 'scripts'
+  engines: 'engines'
 
 make_package_json = ->
   pkg = {}
