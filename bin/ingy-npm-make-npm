@@ -8,14 +8,8 @@ mkdir npm
 (
   set -x
 
-  cp Changes npm
-
   find lib | grep -E '\.coffee$' | while read -r file; do
-    if [[ $file == 'lib/index.coffee' ]]; then
-      js="npm/index.js"
-    else
-      js="npm/${file/\.coffee/.js}"
-    fi
+    js="npm/${file/\.coffee/.js}"
     mkdir -p "$(dirname "$js")"
     coffee --print --compile "$file" > "$js"
   done
@@ -36,11 +30,9 @@ mkdir npm
     done
   fi
 
-  for x in .rc eg; do
-    [[ -e $x ]] && cp -r "$x" npm/
+  for path in Changes .rc eg test; do
+    [[ -e $x ]] && cp -r "$path" npm/
   done
-
-  cp -r test npm/
 
   ingy-npm-make-package-json > npm/package.json
 )
