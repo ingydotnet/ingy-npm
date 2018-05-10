@@ -1,6 +1,8 @@
 .PHONY: npm doc test
 
-INGY_NPM := ../ingy-npm
+ifndef INGY_NPM
+    $(error INGY_NPM must be defined in calling Makefile)
+endif
 
 export PATH := $(PWD)/node_modules/.bin:$(PATH)
 
