@@ -14,6 +14,11 @@ mkdir npm
     coffee --print --compile "$file" > "$js"
   done
 
+  find lib | grep -E '\.coffee$' | while read -r file; do
+    js="npm/${file/\.coffee/.js}"
+    perl -pi -e 's/^# include (.*)/`cat $1`/e' "$js"
+  done
+
   if [[ -d bin ]]; then
     find bin -type f | while read -r file; do
       js="npm/$file"
