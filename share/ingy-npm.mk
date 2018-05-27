@@ -78,13 +78,13 @@ disttest: distdir
 
 publish: check-release dist
 	npm publish $(DIST)
-	git tag $(VERSION)
+	git tag $${TAG_PREFIX:+$$TAG_PREFIX-}$(VERSION)
 	git push --tag
 	rm $(DIST)
 
 publish-dryrun: check-release dist
 	echo npm publish $(DIST)
-	echo git tag $(VERSION)
+	echo git tag $${TAG_PREFIX:+$$TAG_PREFIX-}$(VERSION)
 	echo git push --tag
 	rm $(DIST)
 
