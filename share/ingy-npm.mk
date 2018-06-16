@@ -56,8 +56,9 @@ node_modules:
 ingy-npm-test:
 	coffee -e '(require "./test/lib/test/harness").run()' $@/*.coffee
 
-install: distdir
-	npm install -g $(DISTDIR)
+install: dist
+	npm install -g $(DIST)
+	rm -f $(DIST)
 
 doc:
 	swim --to=pod --complete --wrap doc/$(NAME).swim > ReadMe.pod
