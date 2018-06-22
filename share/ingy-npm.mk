@@ -4,7 +4,7 @@ ifndef INGY_NPM
     $(error INGY_NPM must be defined in calling Makefile)
 endif
 
-export PATH := $(PWD)/node_modules/.bin:$(PATH)
+export PATH := $(NODE_MODULES_DIR)/.bin:$(PATH)
 
 ifeq ($(wildcard Meta),)
     $(error Meta file is required)
@@ -20,6 +20,7 @@ ALL_NPM_DIR := $(ALL_LIB_DIR:%=npm/%)
 ALL_COFFEE := $(shell find lib -name *.coffee)
 ALL_NPM_JS := $(ALL_COFFEE:%.coffee=npm/%.js)
 
+NODE_MODULES_DIR ?= node_modules
 NODE_MODULES := \
     $(INGY_NPM) \
     coffeescript \
@@ -63,8 +64,8 @@ install: dist
 doc:
 	swim --to=pod --complete --wrap doc/$(NAME).swim > ReadMe.pod
 
-npm: node_modules
-	node_modules/.bin/ingy-npm-make-npm
+npm: $(NODE_MODULES_DIR)
+	$(NODE_MODULES_DIR)/.bin/ingy-npm-make-npm
 
 dist: npm
 	(cd npm; npm pack)
@@ -91,10 +92,10 @@ publish-dryrun: check-release dist
 
 ingy-npm-clean:
 	rm -f package*
-	rm -fr npm node_modules
+	rm -fr npm $(NODE_MODULES_DIR)
 	rm -f $(DIST)
 	rm -fr $(DISTDIR)
 
 #------------------------------------------------------------------------------
-check-release: node_modules
-	node_modules/.bin/ingy-npm-check-release
+check-release: $(NODE_MODULES_DIR)
+	$(NODE_MODULES_DIR)/.bin/ingy-npm-check-release
