@@ -20,7 +20,6 @@ ALL_NPM_DIR := $(ALL_LIB_DIR:%=npm/%)
 ALL_COFFEE := $(shell find lib -name *.coffee)
 ALL_NPM_JS := $(ALL_COFFEE:%.coffee=npm/%.js)
 
-NODE_MODULES_DIR ?= node_modules
 NODE_MODULES := \
     $(INGY_NPM) \
     coffeescript \
@@ -47,12 +46,14 @@ help:
 	@echo "    make publish-dryrun   - Don't actually push to NPM"
 	@echo ''
 
+ifeq ($(NODE_MODULES_DIR),)
 node_modules:
 	mkdir $@
 	rm -f package*
 	npm init --yes > /dev/null
 	npm install --no-save $(NODE_MODULES)
 	rm -f package*
+endif
 
 ingy-npm-test:
 	coffee -e '(require "./test/lib/test/harness").run()' $@/*.coffee
