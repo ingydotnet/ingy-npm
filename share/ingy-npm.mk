@@ -23,7 +23,7 @@ ALL_NPM_JS := $(ALL_COFFEE:%.coffee=npm/%.js)
 NODE_MODULES := \
     $(INGY_NPM) \
     coffeescript \
-    js-yaml \
+    yaml \
     $(shell jyj Meta | jq -r '(.["=npm"].dependencies // {}) + (.["=npm"].devDependencies // {}) | keys | .[]')
 
     # pkg \

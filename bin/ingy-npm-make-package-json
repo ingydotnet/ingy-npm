@@ -1,9 +1,9 @@
 #!/usr/bin/env coffee
 
-yaml = require 'js-yaml'
+yaml = require 'yaml'
 fs = require 'fs'
 
-meta = yaml.load String fs.readFileSync 'Meta'
+meta = yaml.parse String fs.readFileSync 'Meta'
 
 npm = meta['=npm'] || {}
 
